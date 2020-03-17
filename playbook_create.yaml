@@ -1,0 +1,67 @@
+---
+  - name: Start CRC 1.7.0 and deploy Kogito Operator and CLI
+    hosts: localhost
+    gather_facts: true
+
+    vars:
+      kogito_tag: "0.8.0"
+      ram: "16384" #MB
+      libvirt_version: "4.3.1"
+      kube_password: "{{ lookup('file', '/home/{{ ansible_user_id }}/.crc/cache/crc_libvirt_{{ libvirt_version }}/kubeadmin-password') }}"
+
+    #vars_prompt:
+    #  - name: "nameSpace"
+    #    prompt: "Insert your Project Name/ NameSpace"
+    #  - name: "PullSecret"
+    #    prompt: "Insert your Pull secret"
+
+    tasks:
+      #- debug: msg="Project Name {{ nameSpace }}"
+
+      - name: Clone Kogito Operator repo
+        become: false
+        git:
+          repo: "https://github.com/kiegroup/kogito-cloud-operator.git"
+          dest: "/tmp/kogito-cloud-operator"
+          accept_hostkey: true
+          version: master
+
+      - name: Copy Kogito cli
+        get_url:
+          url: "https://github.com/kiegroup/kogito-cloud-operator/releases/download/v{{ kogito_tag }}/kogito-{{ kogito_tag }}-linux-amd64.tar.gz"
+          dest: "/tmp/kogito-{{ kogito_tag }}-linux-amd64.tar.gz"
+
+      - name: Extract Kogito cli archive
+        unarchive:
+          src: "/tmp/kogito-{{ kogito_tag }}-linux-amd64.tar.gz"
+          dest: "/tmp/"
+
+      - name: Creates user home kogito dir
+        file:
+          path: "/home/{{ ansible_user_id}}/.local/bin/"
+          state: directory
+
+      - name: Move kogito from /tmp to /home/{{ansible_user_id}}/.local/bin
+        command: "mv /tmp/kogito /home/{{ansible_user_id}}/.local/bin/"
+
+      - name: CRC setup
+        shell: "crc setup"
+        register: crc_result
+
+      - debug: msg="{{ crc_result }}"
+
+      #- name: Write pull secret
+      #  copy:
+      #    content: "{{ PullSecret }}"
+      #    dest: "~/.crc/crc-pull-secret"
+
+     # - name: Start CRC with {{ ram }}MB (~ 3 minutes)
+     #   shell: "crc start -m {{ ram }} -p ~/.crc/crc-pull-secret"
+
+     # - name: Login crc
+     #   shell: "oc login -u kubeadmin -p {{ kube_password }} https://api.crc.testing:6443"
+
+     # - name: Create {{ nameSpace }}
+     #   shell: "oc new-project {{ nameSpace }}"
+
+     # - debug: msg="Your Kube Password is {{ kube_password }}"
