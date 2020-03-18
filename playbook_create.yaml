@@ -74,59 +74,6 @@
       - name: Use {{ nameSpace }} proect
         shell: "oc project {{ nameSpace }}"
 
-      #- name: Try to create all kogito
-      #  shell: "oc apply -f https://raw.githubusercontent.com/kiegroup/kogito-images/master/kogito-imagestream.yaml -n {{ nameSpace }} "
-
-      - name: Install Kogito apps
-        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/crds/app.kiegroup.org_kogitoapps_crd.yaml"
-        register: install_kogito_apps_result
-
-      - debug: msg="{{ install_kogito_apps_result }}"
-
-      - name: Install Kogito data index
-        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/crds/app.kiegroup.org_kogitodataindices_crd.yaml"
-        register: install_kogito_data_index_result
-
-      - debug: msg="{{ install_kogito_data_index_result }}"
-
-      - name: Install Kogito infras
-        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/crds/app.kiegroup.org_kogitoinfras_crd.yaml"
-        register: install_kogito_infras_result
-
-      - debug: msg="{{ install_kogito_infras_result }}"
-
-      - name: Install Kogito jobs services
-        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/crds/app.kiegroup.org_kogitojobsservices_crd.yaml"
-        register: install_kogito_jobs_result
-
-      - debug: msg="{{ install_kogito_jobs_result }}"
-
-      - name: Install Kogito operator
-        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/operator.yaml"
-        register: install_kogito_operator_result
-
-      - debug: msg="{{ install_kogito_operator_result }}"
-
-      - name: Install Kogito role
-        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/role.yaml"
-        register: install_kogito_role_result
-
-      - debug: msg="{{ install_kogito_role_result }}"
-
-      - name: Install Kogito role binding
-        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/role_binding.yaml"
-        register: install_kogito_role_binding_result
-
-      - debug: msg="{{ install_kogito_role_binding_result }}"
-
-      - name: Install Kogito service account
-        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/service_account.yaml"
-        register: install_kogito_service_account_result
-
-      - debug: msg="{{ install_kogito_service_account_result }}"
-
-
-
       - name: Kogito use {{ nameSpace }}
         shell: "kogito use-project {{ nameSpace }}"
         register: kogito_use_project_result
@@ -134,12 +81,18 @@
 
       - debug: msg="{{ kogito_use_project_result }}"
 
-      - name: Deploy Drools-quarkus-example
-        shell: "kogito deploy-service example-quarkus https://github.com/kiegroup/kogito-examples/ --context-dir=drools-quarkus-example"
-        register: install_drools_quarkus_example
-        ignore_errors: yes
+      - name: Kogito use {{ nameSpace }}
+        shell: "kogito install operator -p {{ nameSpace }}"
+        register: kogito_install_operator_result
 
-      - debug: msg="{{ install_drools_quarkus_example }}"
+      - debug: msg="{{ kogito_install_operator_result }}"
+
+      #- name: Deploy Drools-quarkus-example
+      #  shell: "kogito deploy-service example-quarkus https://github.com/kiegroup/kogito-examples/ --context-dir=drools-quarkus-example"
+      #  register: install_drools_quarkus_example
+      #  ignore_errors: yes
+
+      #- debug: msg="{{ install_drools_quarkus_example }}"
 
       - name: Open browser
         shell: "crc console"
