@@ -71,12 +71,6 @@
       - name: Create {{ nameSpace }}
         shell: "oc new-project {{ nameSpace }}"
 
-      - name: Install Kogito operator
-        shell: "oc apply -f https://raw.githubusercontent.com/kiegroup/kogito-cloud/master/s2i/kogito-imagestream.yaml -n {{ nameSpace }}"
-        register: install_operator_result
-
-      - debug: msg="{{ install_operator_result }}"
-
       - name: Install Kogito apps
         shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/crds/app.kiegroup.org_kogitoapps_crd.yaml"
         register: install_kogito_apps_result
@@ -128,6 +122,7 @@
       - name: Kogito use {{ nameSpace }}
         shell: "kogito use-project {{ nameSpace }}"
         register: kogito_use_project_result
+        ignore_errors: yes #kogito-operator Operator seems to be created in the namespace '****', but there's no available pods replicas deployed
 
       - debug: msg="{{ kogito_use_project_result }}"
 
@@ -135,6 +130,6 @@
         shell: "kogito deploy-service example-quarkus https://github.com/kiegroup/kogito-examples/ --context-dir=drools-quarkus-example"
         register: install_drools-quarkus_example_result
 
-      - debug: msg="{{ quarkus_example_result }}"
+      - debug: msg="{{ install_drools-quarkus_example_result }}"
 
       - debug: msg="Your Kube Password is {{ kube_password }}"
