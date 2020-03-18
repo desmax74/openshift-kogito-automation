@@ -128,8 +128,12 @@
 
       - name: Deploy Drools-quarkus-example
         shell: "kogito deploy-service example-quarkus https://github.com/kiegroup/kogito-examples/ --context-dir=drools-quarkus-example"
-        register: install_drools-quarkus_example_result
+        register: install_drools_quarkus_example
+        ignore_errors: yes
 
-      - debug: msg="{{ install_drools-quarkus_example_result }}"
+      - debug: msg="{{ install_drools_quarkus_example }}"
+
+      - name: Open browser
+        shell: "crc console"
 
       - debug: msg="Your Kube Password is {{ kube_password }}"
