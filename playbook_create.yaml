@@ -71,6 +71,12 @@
       - name: Create {{ nameSpace }}
         shell: "oc new-project {{ nameSpace }}"
 
+      - name: Use {{ nameSpace }} proect
+        shell: "oc project {{ nameSpace }}"
+
+      #- name: Try to create all kogito
+      #  shell: "oc apply -f https://raw.githubusercontent.com/kiegroup/kogito-images/master/kogito-imagestream.yaml -n {{ nameSpace }} "
+
       - name: Install Kogito apps
         shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/crds/app.kiegroup.org_kogitoapps_crd.yaml"
         register: install_kogito_apps_result
@@ -118,6 +124,8 @@
         register: install_kogito_service_account_result
 
       - debug: msg="{{ install_kogito_service_account_result }}"
+
+
 
       - name: Kogito use {{ nameSpace }}
         shell: "kogito use-project {{ nameSpace }}"
