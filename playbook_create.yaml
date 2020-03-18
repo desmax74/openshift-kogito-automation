@@ -9,14 +9,14 @@
       libvirt_version: "4.3.1"
       kube_password: "{{ lookup('file', '/home/{{ ansible_user_id }}/.crc/cache/crc_libvirt_{{ libvirt_version }}/kubeadmin-password') }}"
 
-    #vars_prompt:
-    #  - name: "nameSpace"
-    #    prompt: "Insert your Project Name/ NameSpace"
-    #  - name: "PullSecret"
-    #    prompt: "Insert your Pull secret"
+    vars_prompt:
+      - name: "nameSpace"
+        prompt: "Insert your Project Name/ NameSpace"
+      - name: "PullSecret"
+        prompt: "Insert your Pull secret"
 
     tasks:
-      #- debug: msg="Project Name {{ nameSpace }}"
+      - debug: msg="Project Name {{ nameSpace }}"
 
       - name: Clone Kogito Operator repo
         become: false
@@ -36,13 +36,20 @@
           src: "/tmp/kogito-{{ kogito_tag }}-linux-amd64.tar.gz"
           dest: "/tmp/"
 
+      - name: Check that oc exists in /home/{{ansible_user_id}}/.local/bin/
+        stat:
+          path: "/home/{{ ansible_user_id }}/.local/bin/kogito"
+        register: stat_result
+
       - name: Creates user home kogito dir
         file:
           path: "/home/{{ ansible_user_id}}/.local/bin/"
           state: directory
+        when: stat_result.stat.exists == False
 
       - name: Move kogito from /tmp to /home/{{ansible_user_id}}/.local/bin
         command: "mv /tmp/kogito /home/{{ansible_user_id}}/.local/bin/"
+        when: stat_result.stat.exists == False
 
       - name: CRC setup
         shell: "crc setup"
@@ -50,18 +57,78 @@
 
       - debug: msg="{{ crc_result }}"
 
-      #- name: Write pull secret
-      #  copy:
-      #    content: "{{ PullSecret }}"
-      #    dest: "~/.crc/crc-pull-secret"
+      - name: Write pull secret
+        copy:
+          content: "{{ PullSecret }}"
+          dest: "~/.crc/crc-pull-secret"
 
-     # - name: Start CRC with {{ ram }}MB (~ 3 minutes)
-     #   shell: "crc start -m {{ ram }} -p ~/.crc/crc-pull-secret"
+      - name: Start CRC with {{ ram }}MB (~ 3 minutes)
+        shell: "crc start -m {{ ram }} -p ~/.crc/crc-pull-secret"
 
-     # - name: Login crc
-     #   shell: "oc login -u kubeadmin -p {{ kube_password }} https://api.crc.testing:6443"
+      - name: Login crc
+        shell: "oc login -u kubeadmin -p {{ kube_password }} https://api.crc.testing:6443"
 
-     # - name: Create {{ nameSpace }}
-     #   shell: "oc new-project {{ nameSpace }}"
+      - name: Create {{ nameSpace }}
+        shell: "oc new-project {{ nameSpace }}"
 
-     # - debug: msg="Your Kube Password is {{ kube_password }}"
+      - name: Install Kogito operator
+        shell: "oc apply -f https://raw.githubusercontent.com/kiegroup/kogito-cloud/master/s2i/kogito-imagestream.yaml -n {{ nameSpace }}"
+        register: install_operator_result
+
+      - debug: msg="{{ install_operator_result }}"
+
+      - name: Install Kogito apps
+        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/crds/app.kiegroup.org_kogitoapps_crd.yaml"
+        register: install_kogito_apps_result
+
+      - debug: msg="{{ install_kogito_apps_result }}"
+
+      - name: Install Kogito data index
+        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/crds/app.kiegroup.org_kogitodataindices_crd.yaml"
+        register: install_kogito_data_index_result
+
+      - debug: msg="{{ install_kogito_data_index_result }}"
+
+      - name: Install Kogito infras
+        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/crds/app.kiegroup.org_kogitoinfras_crd.yaml"
+        register: install_kogito_infras_result
+
+      - debug: msg="{{ install_kogito_infras_result }}"
+
+      - name: Install Kogito jobs services
+        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/crds/app.kiegroup.org_kogitojobsservices_crd.yaml"
+        register: install_kogito_jobs_result
+
+      - debug: msg="{{ install_kogito_jobs_result }}"
+
+      - name: Install Kogito operator
+        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/operator.yaml"
+        register: install_kogito_operator_result
+
+      - debug: msg="{{ install_kogito_operator_result }}"
+
+      - name: Install Kogito role
+        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/role.yaml"
+        register: install_kogito_role_result
+
+      - debug: msg="{{ install_kogito_role_result }}"
+
+      - name: Install Kogito role binding
+        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/role_binding.yaml"
+        register: install_kogito_role_binding_result
+
+      - debug: msg="{{ install_kogito_role_binding_result }}"
+
+      - name: Install Kogito service account
+        shell: "oc apply -f /tmp/kogito-cloud-operator/deploy/service_account.yaml"
+        register: install_kogito_service_account_result
+
+      - debug: msg="{{ install_kogito_service_account_result }}"
+
+      - name: Deploy Drools-quarkus-example
+        shell: "kogito deploy-service example-quarkus https://github.com/kiegroup/kogito-examples/ --context-dir=drools-quarkus-example"
+        register: install_drools-quarkus_example_result
+
+      - debug: msg="{{ quarkus_example_result }}"
+          
+      - debug: msg="Your Kube Password is {{ kube_password }}"
