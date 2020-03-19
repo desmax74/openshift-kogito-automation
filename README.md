@@ -11,3 +11,9 @@ Create from scratch the crc setup, namespace download and install operator and K
 ```sh
 ansible-playbook ./playbook_create.yaml
 ```
+
+Deploy drools-quarkus-example build and open the CRC UI
+Create from scratch the crc setup, namespace download and install operator and Kogito CLI
+```sh
+ansible-playbook ./playbook_start.yaml
+```
