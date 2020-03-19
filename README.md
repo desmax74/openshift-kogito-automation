@@ -20,3 +20,4 @@ Create from scratch the crc setup, namespace download and install operator and K
 ```sh
 ansible-playbook ./playbook_start.yaml
 ```
+[![asciicast](https://asciinema.org/a/311627.png)](https://asciinema.org/a/311627)
