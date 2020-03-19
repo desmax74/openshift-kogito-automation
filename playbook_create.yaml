@@ -18,14 +18,6 @@
     tasks:
       - debug: msg="Project Name {{ nameSpace }}"
 
-      - name: Clone Kogito Operator repo
-        become: false
-        git:
-          repo: "https://github.com/kiegroup/kogito-cloud-operator.git"
-          dest: "/tmp/kogito-cloud-operator"
-          accept_hostkey: true
-          version: {{ kogito_tag }}
-
       - name: Copy Kogito cli
         get_url:
           url: "https://github.com/kiegroup/kogito-cloud-operator/releases/download/v{{ kogito_tag }}/kogito-{{ kogito_tag }}-linux-amd64.tar.gz"
@@ -87,12 +79,6 @@
 
       - debug: msg="{{ kogito_install_operator_result }}"
 
-      #- name: Deploy Drools-quarkus-example
-      #  shell: "kogito deploy-service example-quarkus https://github.com/kiegroup/kogito-examples/ --context-dir=drools-quarkus-example"
-      #  register: install_drools_quarkus_example
-      #  ignore_errors: yes
-
-      #- debug: msg="{{ install_drools_quarkus_example }}"
-
+      - debug: msg="Project Name {{ nameSpace }}"
 
       - debug: msg="Your Kube Password is {{ kube_password }}"
