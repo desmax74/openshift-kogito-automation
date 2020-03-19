@@ -11,7 +11,7 @@ Create from scratch the crc setup, namespace download and install operator and K
 ```sh
 ansible-playbook ./playbook_create.yaml
 ```
-Note: The CRC setup spent 10 minute, cut to 1 minute in the video recording
+Note: The CRC start spent 10 minute, cut to 1 minute in the video recording
 
 [![asciicast](https://asciinema.org/a/311620.png)](https://asciinema.org/a/311620)
 
