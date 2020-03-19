@@ -54,7 +54,7 @@
           content: "{{ PullSecret }}"
           dest: "~/.crc/crc-pull-secret"
 
-      - name: Start CRC with {{ ram }}MB (~ 3 minutes)
+      - name: Start CRC with {{ ram }}MB (~ 10 minutes)
         shell: "crc start -m {{ ram }} -p ~/.crc/crc-pull-secret"
 
       - name: Login crc
