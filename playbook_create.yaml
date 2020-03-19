@@ -24,7 +24,7 @@
           repo: "https://github.com/kiegroup/kogito-cloud-operator.git"
           dest: "/tmp/kogito-cloud-operator"
           accept_hostkey: true
-          version: master
+          version: {{ kogito_tag }}
 
       - name: Copy Kogito cli
         get_url:
@@ -81,7 +81,7 @@
 
       - debug: msg="{{ kogito_use_project_result }}"
 
-      - name: Kogito use {{ nameSpace }}
+      - name: Kogito install operator on {{ nameSpace }}
         shell: "kogito install operator -p {{ nameSpace }}"
         register: kogito_install_operator_result
 
@@ -94,7 +94,5 @@
 
       #- debug: msg="{{ install_drools_quarkus_example }}"
 
-      - name: Open browser
-        shell: "crc console"
 
       - debug: msg="Your Kube Password is {{ kube_password }}"
