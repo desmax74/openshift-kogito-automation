@@ -87,7 +87,7 @@
       - name: Kogito use {{ nameSpace }}
         shell: "kogito use-project {{ nameSpace }}"
         register: kogito_use_project_result
-        ignore_errors: yes #kogito-operator Operator seems to be created in the namespace '****', but there's no available pods replicas deployed
+        ignore_errors: yes
 
       - debug: msg="{{ kogito_use_project_result }}"
 
@@ -95,7 +95,26 @@
         shell: "kogito install operator -p {{ nameSpace }}"
         register: kogito_install_operator_result
 
-      - debug: msg="{{ kogito_install_operator_result }}"
+      - name: Check AvailableReplica on Kogito operator first on {{ nameSpace }}
+        shell: "kubectl get pods --selector=name=kogito-operator -o jsonpath='{.items[*].status.phase}'"
+        register: resultOne
+
+      - debug: msg = "{{ resultOne }}"
+
+      - name: simulate running wait for up to 60 sec, poll every 10 sec
+        command: "kubectl get pods --selector=name=kogito-operator -o jsonpath='{.items[*].status.phase}'"
+        async: 30
+        poll: 10
+        register: result
+        until: result.stdout == "Running"
+        retries: 20
+        ignore_errors: true
+
+      - debug: msg = "{{ result }}"
+
+       # "kubectl get pods --selector=name=kogito-operator -o jsonpath='{.items[*]}'"
+
+
 
       - debug: msg="Project Name {{ nameSpace }}"
 
