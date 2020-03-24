@@ -12,6 +12,7 @@
 
     vars_prompt:
       - name: "nameSpace"
+        default: "my-kogito-prj"
         prompt: "Insert your Project Name/ NameSpace"
       - name: "PullSecret"
         prompt: "Insert your Pull secret"
@@ -21,20 +22,20 @@
 
       - name: Check api in hosts
         lineinfile:
-          path: /etc/hosts
-          line: {{ ip_on_etc_hosts }}   api.crc.testing
+          path: "/etc/hosts"
+          line: "{{ip_on_etc_hosts}}   api.crc.testing"
           create: yes
 
       - name: Check oauth in hosts
         lineinfile:
-          path: /etc/hosts
-          line: {{ ip_on_etc_hosts }}    oauth-openshift.apps-crc.testing
+          path: "/etc/hosts"
+          line: "{{ip_on_etc_hosts}}   oauth-openshift.apps-crc.testing"
           create: yes
 
       - name: Check console in hosts
         lineinfile:
-          path: /etc/hosts
-          line: {{ ip_on_etc_hosts }}    console-openshift-console.apps-crc.testing
+          path: "/etc/hosts"
+          line: "{{ip_on_etc_hosts}}   console-openshift-console.apps-crc.testing"
           create: yes
 
       - name: Copy Kogito cli
