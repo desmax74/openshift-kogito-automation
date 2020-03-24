@@ -7,6 +7,7 @@
       kogito_tag: "0.8.0"
       ram: "16384" #MB
       libvirt_version: "4.3.1"
+      ip_on_etc_hosts: 192.168.130.11
       kube_password: "{{ lookup('file', '/home/{{ ansible_user_id }}/.crc/cache/crc_libvirt_{{ libvirt_version }}/kubeadmin-password') }}"
 
     vars_prompt:
@@ -21,19 +22,19 @@
       - name: Check api in hosts
         lineinfile:
           path: /etc/hosts
-          line: 192.168.130.11   api.crc.testing
+          line: {{ ip_on_etc_hosts }}   api.crc.testing
           create: yes
 
       - name: Check oauth in hosts
         lineinfile:
           path: /etc/hosts
-          line: 192.168.130.11   oauth-openshift.apps-crc.testing
+          line: {{ ip_on_etc_hosts }}    oauth-openshift.apps-crc.testing
           create: yes
 
       - name: Check console in hosts
         lineinfile:
           path: /etc/hosts
-          line: 192.168.130.11   console-openshift-console.apps-crc.testing
+          line: {{ ip_on_etc_hosts }}    console-openshift-console.apps-crc.testing
           create: yes
 
       - name: Copy Kogito cli
@@ -97,24 +98,17 @@
 
       - name: Check AvailableReplica on Kogito operator first on {{ nameSpace }}
         shell: "kubectl get pods --selector=name=kogito-operator -o jsonpath='{.items[*].status.phase}'"
-        register: resultOne
+        register: result_one
 
-      - debug: msg = "{{ resultOne }}"
+      - debug: msg="{{ result_one }}"
 
-      - name: simulate running wait for up to 60 sec, poll every 10 sec
-        command: "kubectl get pods --selector=name=kogito-operator -o jsonpath='{.items[*].status.phase}'"
-        async: 30
-        poll: 10
+      - name: Check AvailableReplica on Kogito operator first on {{ nameSpace }} wait for up to 120 sec, poll every 10 sec, 12 times
+        shell: "kubectl get pods --selector=name=kogito-operator -o jsonpath='{.items[*].status.phase}'"
         register: result
-        until: result.stdout == "Running"
-        retries: 20
-        ignore_errors: true
-
-      - debug: msg = "{{ result }}"
-
-       # "kubectl get pods --selector=name=kogito-operator -o jsonpath='{.items[*]}'"
-
-
+        until: result.stdout.find("Running") != -1
+        async: 120
+        poll: 10
+        retries: 12
 
       - debug: msg="Project Name {{ nameSpace }}"
 
