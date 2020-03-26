@@ -83,29 +83,29 @@
           dest: "/tmp/examples_pom.xml"
 
       - name: "Get Kogito Examples "
-        shell: xmllint --xpath '/*[local-name()="project"]/*[local-name()="modules"]' /tmp/examples_pom.xml > /tmp/quarkus_examples.txt
+        shell: xmllint --xpath '/*[local-name()="project"]/*[local-name()="modules"]' /tmp/examples_pom.xml > ~/.crc/quarkus_examples.txt
 
       - name: Replace modules tags
         replace:
-          path: /tmp/quarkus_examples.txt
+          path: ~/.crc/quarkus_examples.txt
           regexp: '<modules>'
           replace: ''
 
       - name: Replace module tags
         replace:
-          path: /tmp/quarkus_examples.txt
+          path: ~/.crc/quarkus_examples.txt
           regexp: '<module>'
           replace: '- '
 
       - name: Replace end module tags
         replace:
-          path: /tmp/quarkus_examples.txt
+          path: ~/.crc/quarkus_examples.txt
           regexp: '</module>'
           replace: ''
 
       - name: Replace end modules tags
         replace:
-          path: /tmp/quarkus_examples.txt
+          path: ~/.crc/quarkus_examples.txt
           regexp: '</modules>'
           replace: '\n'
 

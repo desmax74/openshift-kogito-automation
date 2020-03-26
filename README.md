@@ -25,7 +25,7 @@ It deploy drools-quarkus-example build and open the CRC UI, in the
 Ansible output we will see the command to see the log of the build of the service deployed (Drools-quarkus-example).
 Create from scratch the crc setup, namespace download and install operator and Kogito CLI
 ```sh
-ansible-playbook ./playbook_start.yaml
+ansible-playbook ./playbook_deploy.yaml
 ```
 [![asciicast](https://asciinema.org/a/311627.png)](https://asciinema.org/a/311627)
 
