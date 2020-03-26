@@ -1,5 +1,5 @@
 ---
-  - name: Start CRC 1.7.0 and deploy Openshift Drools Hacep
+  - name: Start CRC 1.7.0 and deploy kogito examples
     hosts: localhost
     gather_facts: true
 
@@ -7,7 +7,7 @@
       libvirt_version: "4.3.1"
       ram: "16384" #MB   
       kube_password: "{{ lookup('file', '/home/{{ ansible_user_id }}/.crc/cache/crc_libvirt_{{ libvirt_version }}/kubeadmin-password') }}"
-      examples: "{{  lookup('file', '/tmp/examples.txt') }}"
+      examples: "{{  lookup('file', '/tmp/quarkus_examples.txt') }}"
 
     vars_prompt:
       - name: "nameSpace"
@@ -19,12 +19,12 @@
         default: "\n{{ examples }}"
 
     tasks:
-      - import_tasks: playbook_pre_start.yaml
+      #- import_tasks: playbook_pre_start.yaml
 
-      - name: "Download Kogito Examples pom"
-        get_url:
-          url: "https://raw.githubusercontent.com/kiegroup/kogito-examples/stable/pom.xml"
-          dest: "/tmp/examples_pom.xml"
+      #- name: "Download Kogito Examples pom"
+      #  get_url:
+      #    url: "https://raw.githubusercontent.com/kiegroup/kogito-examples/stable/pom.xml"
+      #    dest: "/tmp/examples_pom.xml"
 
       #- name: Get Content Section
       #  shell: xmllint --xpath '/*[local-name()="project"]/*[local-name()="modules"]' /tmp/examples_pom.xml > /tmp/examples.txt
@@ -46,7 +46,7 @@
 
       - debug: msg="{{ kogito_use_project_result }}"
 
-      - name: Deploy Drools-quarkus-example
+      - name: Deploy {{ example }}
         shell: "kogito deploy-service {{ example }} https://github.com/kiegroup/kogito-examples/ --context-dir={{ example }}"
         register: install_drools_quarkus_example
         ignore_errors: yes
