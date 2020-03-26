@@ -1,4 +1,4 @@
-# Openshift Kogito automation
+# Openshift (CRC) Kogito automation
 
 Ansible scripts to automate creation of CRC cluster and the deploy of one of the Kogito examples with just one command line.
 
