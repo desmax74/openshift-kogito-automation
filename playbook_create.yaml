@@ -74,6 +74,41 @@
           content: "{{ PullSecret }}"
           dest: "~/.crc/crc-pull-secret"
 
+
+
+      - name: "Download Kogito Examples pom"
+        get_url:
+          url: "https://raw.githubusercontent.com/kiegroup/kogito-examples/stable/pom.xml"
+          dest: "/tmp/examples_pom.xml"
+
+      - name: "Get Kogito Examples "
+        shell: xmllint --xpath '/*[local-name()="project"]/*[local-name()="modules"]' /tmp/examples_pom.xml > /tmp/quarkus_examples.txt
+
+      - name: Replace modules tags
+        replace:
+          path: /tmp/quarkus_examples.txt
+          regexp: '<modules>'
+          replace: ''
+
+      - name: Replace module tags
+        replace:
+          path: /tmp/quarkus_examples.txt
+          regexp: '<module>'
+          replace: '- '
+
+      - name: Replace end module tags
+        replace:
+          path: /tmp/quarkus_examples.txt
+          regexp: '</module>'
+          replace: ''
+
+      - name: Replace end modules tags
+        replace:
+          path: /tmp/quarkus_examples.txt
+          regexp: '</modules>'
+          replace: '\n'
+
+
       - name: Start CRC with {{ ram }}MB (~ 10 minutes)
         shell: "crc start -m {{ ram }} -p ~/.crc/crc-pull-secret"
 
