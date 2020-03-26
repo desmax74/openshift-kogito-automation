@@ -12,7 +12,7 @@
 
     vars_prompt:
       - name: "nameSpace"
-        default: "my-kogito-prj"
+        default: "my-kogito-project"
         prompt: "Insert your Project Name/ NameSpace"
       - name: "PullSecret"
         prompt: "Insert your Pull secret"
