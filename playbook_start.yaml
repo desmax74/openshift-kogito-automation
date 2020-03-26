@@ -13,10 +13,12 @@
       - name: "nameSpace"
         prompt: "Insert your Project Name/ NameSpace"
         default: "my-kogito-project"
+        private: "no"
 
       - name: "example"
         prompt: "Choose the example to deploy"
         default: "\n{{ examples }}"
+        private: "no"
 
     tasks:
       #- import_tasks: playbook_pre_start.yaml
