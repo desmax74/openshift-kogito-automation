@@ -15,7 +15,7 @@ ansible-playbook ./playbook_create.yaml
 ```
 Note: The CRC start spent 10 minute, cut to few seconds in the video recording
 
-[![asciicast](https://asciinema.org/a/313707.png)](https://asciinema.org/a/313707)
+[![asciicast](https://asciinema.org/a/313700.png)](https://asciinema.org/a/313700)
 
 After some minutes the setup of the four Operators
 Kogito, Keycloak, Infinispan, Strimzi
