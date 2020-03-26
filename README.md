@@ -16,6 +16,7 @@ ansible-playbook ./playbook_create.yaml
 ```
 Note: The CRC start spent 10 minute on a laptop, cut to few seconds in the video recording
 
+Video Duration: 1:39 min.
 [![asciicast](https://asciinema.org/a/313700.png)](https://asciinema.org/a/313700)
 
 
@@ -25,4 +26,5 @@ the logs from cli will be on the ansible output.
 ```sh
 ansible-playbook ./playbook_deploy.yaml
 ```
+Video Duration 27:sec
 [![asciicast](https://asciinema.org/a/313703.png)](https://asciinema.org/a/313703)
