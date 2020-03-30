@@ -21,16 +21,6 @@
         private: "no"
 
     tasks:
-      #- import_tasks: playbook_pre_start.yaml
-
-      #- name: "Download Kogito Examples pom"
-      #  get_url:
-      #    url: "https://raw.githubusercontent.com/kiegroup/kogito-examples/stable/pom.xml"
-      #    dest: "/tmp/examples_pom.xml"
-
-      #- name: Get Content Section
-      #  shell: xmllint --xpath '/*[local-name()="project"]/*[local-name()="modules"]' /tmp/examples_pom.xml > /tmp/examples.txt
-      #  register: xml
 
       - debug: msg="Project Name {{ nameSpace }}"
 
