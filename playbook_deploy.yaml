@@ -1,10 +1,10 @@
 ---
-  - name: Start CRC 1.7.0 and deploy kogito examples
+  - name: Start CRC 1.8.0 and deploy kogito examples
     hosts: localhost
     gather_facts: true
 
     vars:
-      libvirt_version: "4.3.1"
+      libvirt_version: "4.3.8"
       ram: "16384" #MB   
       kube_password: "{{ lookup('file', '/home/{{ ansible_user_id }}/.crc/cache/crc_libvirt_{{ libvirt_version }}/kubeadmin-password') }}"
       examples: "{{  lookup('file', '/tmp/quarkus_examples.txt') }}"
