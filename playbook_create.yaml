@@ -21,24 +21,6 @@
     tasks:
       - debug: msg="Project Name {{ nameSpace }}"
 
-      - name: Check api in hosts
-        lineinfile:
-          path: "/etc/hosts"
-          line: "{{ip_on_etc_hosts}}   api.crc.testing"
-          create: yes
-
-      - name: Check oauth in hosts
-        lineinfile:
-          path: "/etc/hosts"
-          line: "{{ip_on_etc_hosts}}   oauth-openshift.apps-crc.testing"
-          create: yes
-
-      - name: Check console in hosts
-        lineinfile:
-          path: "/etc/hosts"
-          line: "{{ip_on_etc_hosts}}   console-openshift-console.apps-crc.testing"
-          create: yes
-
       - name: Copy Kogito cli
         get_url:
           url: "https://github.com/kiegroup/kogito-cloud-operator/releases/download/v{{ kogito_tag }}/kogito-{{ kogito_tag }}-linux-amd64.tar.gz"
@@ -75,9 +57,7 @@
           content: "{{ PullSecret }}"
           dest: "~/.crc/crc-pull-secret"
 
-
-
-      - name: "Download Kogito Examples pom"
+      - name: Download Kogito Examples pom
         get_url:
           url: "https://raw.githubusercontent.com/kiegroup/kogito-examples/stable/pom.xml"
           dest: "/tmp/examples_pom.xml"
@@ -108,7 +88,6 @@
           path: ~/.crc/quarkus_examples.txt
           regexp: '</modules>'
           replace: '\n'
-
 
       - name: Start CRC with {{ ram }}MB (~ 10 minutes)
         shell: "crc start -m {{ ram }} -p ~/.crc/crc-pull-secret"

@@ -5,47 +5,24 @@
   vars:
     kafka_cluster_name: "my-cluster-kafka"
     app_namespace: "my-kogito-project"
+    ip_on_etc_hosts: 192.168.130.11
 
   tasks:
 
   - name: Check api in hosts
     lineinfile:
       path: /etc/hosts
-      line: "192.168.130.11   api.crc.testing"
+      line: "{{ip_on_etc_hosts}}   api.crc.testing"
       create: yes
 
   - name: Check oauth in hosts
     lineinfile:
       path: /etc/hosts
-      line: "192.168.130.11   oauth-openshift.apps-crc.testing"
+      line: "{{ip_on_etc_hosts}}   oauth-openshift.apps-crc.testing"
       create: yes
 
   - name: Check console in hosts
     lineinfile:
       path: /etc/hosts
-      line: "192.168.130.11   console-openshift-console.apps-crc.testing"
-      create: yes
-
-  - name: Check {{kafka_namespace}}-bootstrap-{{app_namespace}}.apps-crc.testing in hosts
-    lineinfile:
-      path: /etc/hosts
-      line: "192.168.130.11   {{kafka_namespace}}-bootstrap-{{app_namespace}}.apps-crc.testing"
-      create: yes
-
-  - name: Check {{kafka_namespace}}-0-{{app_namespace}}.apps-crc.testing in hosts
-    lineinfile:
-      path: /etc/hosts
-      line: "192.168.130.11   {{kafka_namespace}}-0-{{app_namespace}}.apps-crc.testing"
-      create: yes
-
-  - name: Check {{kafka_namespace}}-1-{{app_namespace}}.apps-crc.testing in hosts
-    lineinfile:
-      path: /etc/hosts
-      line: "192.168.130.11   my-cluster-kafka-1-{{app_namespace}}.apps-crc.testing"
-      create: yes
-
-  - name: Check {{kafka_namespace}}-2-{{app_namespace}}.apps-crc.testing in hosts
-    lineinfile:
-      path: /etc/hosts
-      line: "192.168.130.11   my-cluster-kafka-2-{{app_namespace}}.apps-crc.testing"
+      line: "{{ip_on_etc_hosts}}   console-openshift-console.apps-crc.testing"
       create: yes
