@@ -4,7 +4,7 @@
     gather_facts: true
 
     vars:
-      kogito_tag: "0.8.0"
+      kogito_tag: "0.10.0"
       ram: "16384" #MB
       libvirt_version: "4.4.3"
       ip_on_etc_hosts: 192.168.130.11
@@ -23,7 +23,7 @@
 
       - name: Copy Kogito cli
         get_url:
-          url: "https://github.com/kiegroup/kogito-cloud-operator/releases/download/v{{ kogito_tag }}/kogito-{{ kogito_tag }}-linux-amd64.tar.gz"
+          url: "https://github.com/kiegroup/kogito-cloud-operator/releases/download/{{ kogito_tag }}/kogito-cli-{{ kogito_tag }}-linux-amd64.tar.gz"
           dest: "/tmp/kogito-{{ kogito_tag }}-linux-amd64.tar.gz"
 
       - name: Extract Kogito cli archive
