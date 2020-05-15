@@ -7,7 +7,7 @@
       libvirt_version: "4.4.3"
       ram: "16384" #MB   
       kube_password: "{{ lookup('file', '/home/{{ ansible_user_id }}/.crc/cache/crc_libvirt_{{ libvirt_version }}/kubeadmin-password') }}"
-      examples: "{{  lookup('file', '/tmp/quarkus_examples.txt') }}"
+      examples: "{{  lookup('file', '~/.crc/quarkus_examples.txt') }}"
 
     vars_prompt:
       - name: "nameSpace"
