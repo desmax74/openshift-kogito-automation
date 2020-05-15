@@ -2,7 +2,7 @@
 
 Ansible scripts to automate creation of CRC cluster and the deploy of one of the Kogito examples with just one command line.
 
-CRC 1.8.0, and Ansible must be installed.
+CRC 1.10.0, and Ansible must be installed.
 No previous CRC setup (no /home/{user}/.crc folder), otherwise the create script will fail, delete .crc if you want run more than once the create playbook
 
 ### Create an account on cloud.redhat.com
