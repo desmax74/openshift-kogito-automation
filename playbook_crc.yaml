@@ -4,7 +4,7 @@
   gather_facts: true
 
   vars:
-    crc_version: "1.8.0"
+    crc_version: "1.10.0"
 
   tasks:
 

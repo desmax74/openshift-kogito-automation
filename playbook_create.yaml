@@ -1,12 +1,12 @@
 ---
-  - name: Start CRC 1.7.0 and deploy Kogito Operator and CLI
+  - name: Start CRC 1.10.0 and deploy Kogito Operator and CLI
     hosts: localhost
     gather_facts: true
 
     vars:
       kogito_tag: "0.8.0"
       ram: "16384" #MB
-      libvirt_version: "4.3.1"
+      libvirt_version: "4.4.3"
       ip_on_etc_hosts: 192.168.130.11
       kube_password: "{{ lookup('file', '/home/{{ ansible_user_id }}/.crc/cache/crc_libvirt_{{ libvirt_version }}/kubeadmin-password') }}"
 
